@@ -1,0 +1,4 @@
+interface:
+  display_name: "DBA Review"
+  short_description: "Database performance review — N+1 detection, index analysis, migration safety"
+  default_prompt: "Review database performance for the provided scope — detect N+1 queries, missing indexes, migration risks, and raw SQL injection vectors."

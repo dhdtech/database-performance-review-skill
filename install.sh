@@ -49,44 +49,42 @@ printf '  %s\n' "$(dim "https://github.com/dhdtech/dba-review")"
 printf '\n'
 printf '  %s\n' "$(dim "This script installs OR updates the skill to the latest version.")"
 printf '  %s\n' "$(dim "Already installed? Run it again — it will pull the latest changes.")"
-printf '  %s\n' "$(dim "Pick one platform, pick a few, or grab them all.")"
+printf '  %s\n' "$(dim "You'll be asked y/n for each platform — no numbers, no typos.")"
 printf '\n'
 
-# --- show all platforms ---
-printf '  %s\n' "$(bold "Which platform(s)?")"
-printf '\n'
-for p in 1 2 3 4; do
-  printf '    %s  %s  %s\n' \
-    "$(green "[$p]")" \
-    "$(bold "$(label_for "$p")")" \
-    "$(dim "→ $(dir_for "$p")")"
-done
-printf '    %s  %s\n' "$(green "[a]")" "$(bold "All of the above")"
-printf '\n'
-
-read -r -p '  Enter number(s) or "a": ' CHOICE < /dev/tty
-
-# --- resolve selection ---
+# --- ask each platform ---
+printf '  %s\n' "$(bold "Install for which platforms?")"
+printf '  %s\n\n' "$(dim "Answer y/n for each — press Enter to accept the default.")"
 SELECTED=""
-case "$CHOICE" in
-  a|A|all|ALL)
-    SELECTED="1 2 3 4"
-    ;;
-  *)
-    for num in $CHOICE; do
-      case "$num" in
-        1|2|3|4) SELECTED="$SELECTED $num" ;;
-      esac
-    done
-    ;;
-esac
+for p in 1 2 3 4; do
+  DEST="$(dir_for "$p")"
+  if [[ -d "$DEST" ]]; then
+    HINT="$(dim "(already installed — will update)")"
+  else
+    HINT="$(dim "→ $DEST")"
+  fi
+  while true; do
+    printf '    %s  %s\n      %s' \
+      "$(bold "$(label_for "$p")")" \
+      "$HINT" \
+      "$(dim "Install? [Y/n]: ")"
+    read -r ANS < /dev/tty
+    case "${ANS:-y}" in
+      y|Y|yes|YES) SELECTED="$SELECTED $p"; break ;;
+      n|N|no|NO) break ;;
+      *) printf '      %s\n' "$(dim "Please answer y or n")" ;;
+    esac
+  done
+done
 
 SELECTED="${SELECTED# }"
 
 if [[ -z "$SELECTED" ]]; then
-  printf '\n  %s\n' "$(bold "No valid platform selected. Exiting.")"
-  exit 1
+  printf '\n  %s\n' "$(bold "No platforms selected. Exiting.")"
+  exit 0
 fi
+
+printf '\n  %s %s\n\n' "$(green "✓")" "$(bold "Installing for:") $(for p in $SELECTED; do printf '%s  ' "$(label_for "$p")"; done)"
 
 # --- install ---
 printf '\n'

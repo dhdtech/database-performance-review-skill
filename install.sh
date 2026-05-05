@@ -47,8 +47,9 @@ printf '\n'
 printf '  %s — %s\n' "$(bold "Database Performance Review")" "$(dim "installer")"
 printf '  %s\n' "$(dim "https://github.com/dhdtech/database-performance-review-skill")"
 printf '\n'
-printf '  %s\n' "$(dim "This script clones the skill into the correct directory for each")"
-printf '  %s\n' "$(dim "platform you select. Pick one, pick a few, or grab them all.")"
+printf '  %s\n' "$(dim "This script installs OR updates the skill to the latest version.")"
+printf '  %s\n' "$(dim "Already installed? Run it again — it will pull the latest changes.")"
+printf '  %s\n' "$(dim "Pick one platform, pick a few, or grab them all.")"
 printf '\n'
 
 # --- show all platforms ---
@@ -94,13 +95,20 @@ for p in $SELECTED; do
   LABEL="$(label_for "$p")"
 
   if [[ -d "$DEST" ]]; then
-    printf '  %s  %s %s\n' "$(dim "⊘")" "$LABEL" "$(dim "already installed at $DEST")"
+    printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "updating...")"
+    if git -C "$DEST" pull --quiet --ff-only 2>/dev/null; then
+      printf '\r  %s  %s %s\n' "$(green "✓")" "$LABEL" "$(dim "updated → $DEST")"
+    else
+      printf '\r  %s  %s %s\n' "$(bold "✗")" "$LABEL" "$(dim "update failed — remove $DEST and retry")"
+    fi
+    rm -rf "$DEST/.git"
     continue
   fi
 
-  mkdir -p "${DEST%/*}"
+  mkdir -p "$DEST"
   printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "installing...")"
   if git clone --quiet "$REPO" "$DEST" 2>/dev/null; then
+    rm -rf "$DEST/.git"
     printf '\r  %s  %s %s\n' "$(green "✓")" "$LABEL" "$(dim "→ $DEST")"
   else
     printf '\r  %s  %s %s\n' "$(bold "✗")" "$LABEL" "$(dim "failed — check git is installed and you have disk space")"

@@ -59,7 +59,7 @@ SELECTED=""
 for p in 1 2 3 4; do
   DEST="$(dir_for "$p")"
   if [[ -d "$DEST" ]]; then
-    HINT="$(dim "(already installed — will update)")"
+    HINT="$(dim "(already installed — will replace)")"
   else
     HINT="$(dim "→ $DEST")"
   fi
@@ -93,18 +93,13 @@ for p in $SELECTED; do
   LABEL="$(label_for "$p")"
 
   if [[ -d "$DEST" ]]; then
-    printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "updating...")"
-    if git -C "$DEST" pull --quiet --ff-only 2>/dev/null; then
-      printf '\r  %s  %s %s\n' "$(green "✓")" "$LABEL" "$(dim "updated → $DEST")"
-    else
-      printf '\r  %s  %s %s\n' "$(bold "✗")" "$LABEL" "$(dim "update failed — remove $DEST and retry")"
-    fi
-    rm -rf "$DEST/.git"
-    continue
+    printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "replacing...")"
+    rm -rf "$DEST"
+  else
+    printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "installing...")"
   fi
 
   mkdir -p "$DEST"
-  printf '  %s  %s %s' "$(cyan "↓")" "$LABEL" "$(dim "installing...")"
   if git clone --quiet "$REPO" "$DEST" 2>/dev/null; then
     rm -rf "$DEST/.git"
     printf '\r  %s  %s %s\n' "$(green "✓")" "$LABEL" "$(dim "→ $DEST")"

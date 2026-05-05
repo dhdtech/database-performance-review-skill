@@ -64,6 +64,13 @@ git clone https://github.com/dhdtech/dba-review.git \
   ~/.codex/skills/dba-review
 ```
 
+**OpenCode** — personal skills live at `~/.config/opencode/skills/<name>/SKILL.md`:
+
+```bash
+git clone https://github.com/dhdtech/dba-review.git \
+  ~/.config/opencode/skills/dba-review
+```
+
 ## Use
 
 The skill activates whenever database performance is relevant to what you're asking. Examples:
@@ -80,6 +87,7 @@ Or invoke it directly:
 | Copilot CLI | `/dba-review` |
 | Gemini CLI | `/dba-review` |
 | **Codex (OpenAI)** | **`$dba-review`** |
+| OpenCode | `/dba-review` |
 
 > [!IMPORTANT]
 > **Codex users — use `$dba-review`, not `/dba-review`.**
@@ -105,7 +113,7 @@ MIT. Use it, fork it, ship it in your product. No credit needed.
 
 > **⚠️ After installing: close and reopen your CLI tool.**
 >
-> Claude Code picks up new skill directories only at session start. Copilot CLI needs `/skills reload`. Gemini CLI needs a restart. If the skill doesn't appear, a fresh session always fixes it.
+> Claude Code and OpenCode pick up new skill directories only at session start. Copilot CLI needs `/skills reload`. Gemini CLI needs a restart. If the skill doesn't appear, a fresh session always fixes it.
 
 ---
 

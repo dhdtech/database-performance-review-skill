@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="https://github.com/dhdtech/database-performance-review-skill.git"
+REPO="https://github.com/dhdtech/dba-review.git"
 SKILL_NAME="dba-review"
 
 # --- helpers ---
@@ -45,7 +45,7 @@ dir_for() {
 clear
 printf '\n'
 printf '  %s — %s\n' "$(bold "Database Performance Review")" "$(dim "installer")"
-printf '  %s\n' "$(dim "https://github.com/dhdtech/database-performance-review-skill")"
+printf '  %s\n' "$(dim "https://github.com/dhdtech/dba-review")"
 printf '\n'
 printf '  %s\n' "$(dim "This script installs OR updates the skill to the latest version.")"
 printf '  %s\n' "$(dim "Already installed? Run it again — it will pull the latest changes.")"
